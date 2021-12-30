@@ -1,26 +1,44 @@
+"""
+This program takes a target number, and a list of smaller numbers (cards), and attempts to find a way to combine those cards into the target, using only +-*/
+
+It does this by combing each pair of cards (once for each operator), and then all of those results, and then again, until all cards have been combined
+
+Example usages:
+	$ python3 numbers.py 819 75 50 2 3 8 7          
+	> Found: (((50 * 7) - (75 + 2)) * 3) = 819
+	> Completed in 0.03 seconds
+
+	$ python3 numbers.py 824 3 7 6 2 1 7 
+	> Closest result was 2 away. ((((7 + 3) * 6) - 1) * (7 * 2)) = 826
+	> Completed in 8.50 seconds
+
+"""
+
+
 import sys, math, itertools, time
 
-class Op():
+class Operation():
 	def __init__(self, func, sign):
 		self.func = func
 		self.sign = sign
 
-ops = [
-	Op(lambda x,y: x+y, "+"),
-	Op(lambda x,y: x-y, "-"),
-	Op(lambda x,y: x*y, "*"),
-	Op(lambda x,y: int(x/y) if x%y == 0 else 0, "/")
+operations = [
+	Operation(lambda x,y: x+y, "+"),
+	Operation(lambda x,y: x-y, "-"),
+	Operation(lambda x,y: x*y, "*"),
+	Operation(lambda x,y: int(x/y) if x%y == 0 else 0, "/")
 ]
 
+# A bunch is a group of cards, combined with operations to give a value
 class Bunch():
 	def __init__(self, value, used, prettyParts):
 		self.value = value
-		if value == 0:
+		if value == 0: # not useful
 			self.hash = 0
 			return
-		self.used = used
+		self.used = used 
 		self.pretty = prettyParts
-		self.hash = (value << 8) + used
+		self.hash = (value << len(cards)) + used # Duplicate bunches with the same value, using the same cards are irrelevant
 
 class Solution():
 	bunches = {}
@@ -43,25 +61,29 @@ class Solution():
 		else:
 			print("No solution found")
 
+	# Human readable method fo reaching found value
 	def prettier(self, x):
 		if x[1] == "":
 			return str(x[0])
+		#TODO: remove surplus brackets
 		return "(%s %s %s)"%(self.prettier(x[0]), x[1], self.prettier(x[2]))
 
+	# Check that two bunched do not use the same card
 	def isCollision(self, b1, b2):
 		if b1.value == 0 or b2.value == 0:
 			return True
 		return b1.used & b2.used != 0
 
+	# Find all the different values that can be reached by combining two these two bunches with the operators
 	def combine(self, b1, b2): #returns newBunches, Matched bunch
 		newBunches = {}
 		if self.isCollision(b1, b2):
 			return newBunches, None
 
 		bigBunch, smallBunch = (b1, b2) if b1.value > b2.value else (b2, b1)
-		for op in ops:
+		for op in operations:
 			bunch = Bunch(op.func(bigBunch.value, smallBunch.value), bigBunch.used | smallBunch.used, (bigBunch.pretty, op.sign, smallBunch.pretty))
-			if bunch.value == self.target:
+			if bunch.value == self.target: # Found the answer!
 				return {}, bunch
 			dist = abs(target - bunch.value)
 			if dist < self.distance:
