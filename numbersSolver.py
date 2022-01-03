@@ -4,11 +4,11 @@ This program takes a target number, and a list of smaller numbers (cards), and a
 It does this by combining each pair of cards (once for each operator), and then all of those results, and then again, until all cards have been combined
 
 Example usages:
-	$ python3 numbers.py 75 50 2 3 8 7 819      
+	$ python3 numbersSolver.py 75 50 2 3 8 7 819
 	> Found: (((50 * 7) - (75 + 2)) * 3) = 819
 	> Completed in 0.03 seconds
 
-	$ python3 numbers.py 3 7 6 2 1 7 824
+	$ python3 numbersSolver.py 3 7 6 2 1 7 824
 	> Closest result was 2 away. ((((7 + 3) * 6) - 1) * (7 * 2)) = 826
 	> Completed in 8.50 seconds
 
@@ -32,13 +32,14 @@ operations = [
 # A bunch is a group of cards, combined with operations to give a value
 class Bunch():
 	def __init__(self, value, used, prettyParts):
-		self.value = value
+		self.value = int(value)
 		if value == 0: # not useful
 			self.hash = 0
 			return
 		self.used = used 
 		self.pretty = prettyParts
-		self.hash = (value << len(cards)) + used # Duplicate bunches with the same value, using the same cards are irrelevant
+		#TODO: Only supports up to 8 cards 8 should be replace by len(cards)
+		self.hash = (self.value << 8) + used # Duplicate bunches with the same value, using the same cards are irrelevant
 
 class Solution():
 	bunches = {}
@@ -49,17 +50,21 @@ class Solution():
 
 	def __init__(self, cards, target):
 		self.cards = cards	
-		self.target = target
+		self.target = int(target)
 		for i, card in enumerate(cards):
 			bunch = Bunch(card, 2**i, (str(card),"",""))
 			self.bunches[bunch.hash] = bunch
 		result = self.solve()
+		self.result = result
 		if result:
 			print("Found: %s = %s"%(self.prettier(result.pretty), target))
 		elif self.closest:
 			print("Closest result was %s away. %s = %s"%(self.distance, self.prettier(self.closest.pretty), self.closest.value))
 		else:
 			print("No solution found")
+
+	def get(self):
+		return self.prettier(self.result.pretty)
 
 	# Human readable method fo reaching found value
 	def prettier(self, x):
@@ -85,7 +90,7 @@ class Solution():
 			bunch = Bunch(op.func(bigBunch.value, smallBunch.value), bigBunch.used | smallBunch.used, (bigBunch.pretty, op.sign, smallBunch.pretty))
 			if bunch.value == self.target: # Found the answer!
 				return {}, bunch
-			dist = abs(target - bunch.value)
+			dist = abs(self.target - bunch.value)
 			if dist < self.distance:
 				self.closest = bunch
 				self.distance = dist

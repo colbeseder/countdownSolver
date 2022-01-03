@@ -1,0 +1,28 @@
+<h2>Letters</h2>
+<input id="letters">
+<button id="submitLetters" onclick="solveLetters()">Go</button>
+<div id="lettersResult"></div>
+<h2>Numbers</h2>
+<input id="numbers">
+<input id="target">
+<button onclick="solveNumbers()">Go</button>
+<div id="numbersResult"></div>
+<script>
+function solveLetters(){
+    var cards = document.getElementById("letters").value;
+    fetch("/api/letters/" + cards)
+    .then(function(resp){
+        resp.text().then(function(text){document.getElementById("lettersResult").innerText = text});
+    });
+}
+
+function solveNumbers(){
+    var cards = document.getElementById("numbers").value;
+    var target = document.getElementById("target").value
+    fetch("/api/numbers/" + cards + "/" + target)
+    .then(function(resp){
+        resp.text().then(function(text){document.getElementById("numbersResult").innerText = text});
+    });
+}
+
+</script>
