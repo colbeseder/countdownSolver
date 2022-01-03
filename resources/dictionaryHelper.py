@@ -1,3 +1,15 @@
+"""
+Prepares dictionary into a 'Trie' and pickles it. Then loads it and searches it.
+
+Create a new trie:
+	tree = DictTree(["WORDS", "CAT", "CART"])
+
+Search the trie:
+	tree.findAll("ABCRT") # Returns ["CART", "CAT"]
+"""
+
+
+
 import sys, pickle
 
 DEFAULT_PICKLE_PATH = "resources/dictionary.pk"

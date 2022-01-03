@@ -1,7 +1,7 @@
 """
 This program takes a target number, and a list of smaller numbers (cards), and attempts to find a way to combine those cards into the target, using only +-*/
 
-It does this by combing each pair of cards (once for each operator), and then all of those results, and then again, until all cards have been combined
+It does this by combining each pair of cards (once for each operator), and then all of those results, and then again, until all cards have been combined
 
 Example usages:
 	$ python3 numbers.py 75 50 2 3 8 7 819      
