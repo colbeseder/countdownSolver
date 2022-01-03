@@ -1,4 +1,4 @@
-from lettersHelper import *
+from resources.dictionaryHelper import *
 import sys, time
 
 if __name__ == "__main__":

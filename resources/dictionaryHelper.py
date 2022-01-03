@@ -65,6 +65,7 @@ def findAllFromDefaultDictionary(pool):
 	try:
 		tree = unstash(DEFAULT_PICKLE_PATH)
 	except Exception as e:
+		print(e)
 		tree = prepFromFile(DEFAULT_WORD_LIST)
 		stash(DEFAULT_PICKLE_PATH, tree) # for next time
 	return tree.findAll(pool.upper())
