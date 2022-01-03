@@ -65,6 +65,9 @@ def prepFromFile(filePath):
 			fullDict.addWord(word)
 	return fullDict
 
+def prepFromDefault():
+	return prepFromFile(DEFAULT_WORD_LIST)
+
 def stash(picklePath, tree):
 	with open(DEFAULT_PICKLE_PATH, 'wb') as f:
 		pickle.dump(tree, f, pickle.HIGHEST_PROTOCOL)
@@ -77,7 +80,7 @@ def findAllFromDefaultDictionary(pool):
 	try:
 		tree = unstash(DEFAULT_PICKLE_PATH)
 	except Exception as e:
-		tree = prepFromFile(DEFAULT_WORD_LIST)
+		tree = prepFromDefault()
 		stash(DEFAULT_PICKLE_PATH, tree) # for next time
 	return tree.findAll(pool.upper())
 

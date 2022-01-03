@@ -1,6 +1,6 @@
 from flask import Flask
 import requests
-import numbersSolver, lettersSolver
+import numbersSolver, lettersSolver, resources.dictionaryHelper
 
 app = Flask(__name__)
 app = Flask(__name__,
@@ -30,5 +30,5 @@ def static_file(path):
     return app.send_static_file(path)
 
 if __name__ == '__main__':
-    print("running")
+    resources.dictionaryHelper.prepFromDefault()
     app.run(host='0.0.0.0')

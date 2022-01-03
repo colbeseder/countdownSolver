@@ -55,16 +55,16 @@ class Solution():
 			bunch = Bunch(card, 2**i, (str(card),"",""))
 			self.bunches[bunch.hash] = bunch
 		result = self.solve()
-		self.result = result
 		if result:
-			print("Found: %s = %s"%(self.prettier(result.pretty), target))
+			self.result = "Found: %s = %s"%(self.prettier(result.pretty), target)
 		elif self.closest:
-			print("Closest result was %s away. %s = %s"%(self.distance, self.prettier(self.closest.pretty), self.closest.value))
+			self.result = "%s away. %s = %s"%(self.distance, self.prettier(self.closest.pretty), self.closest.value)
 		else:
-			print("No solution found")
+			self.result = "No solution found"
+		print(self.result)
 
 	def get(self):
-		return self.prettier(self.result.pretty)
+		return self.result
 
 	# Human readable method fo reaching found value
 	def prettier(self, x):
