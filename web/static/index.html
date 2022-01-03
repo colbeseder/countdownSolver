@@ -1,5 +1,6 @@
 <html>
     <head>
+        <link rel="stylesheet" href="styles.css">
         <script>
             function solveLetters(){
                 var cards = document.getElementById("letters").value.replace(/[^A-Z]/ig, "");
@@ -23,24 +24,28 @@
     </head>
     <body>
         <h1>Countdown Solver</h1>
+        <div>
+            <div class="game">
+                <h2>Letters Game</h2>
+                <form onsubmit="return solveLetters()">
+                    <label>Letters</label><br>
+                    <input id="letters"><br>
+                    <button id="submitLetters">Solve</button>
+                    <div class="result" id="lettersResult"></div>
+                </form>
+            </div>
 
-        <h2>Letters Game</h2>
-        <form onsubmit="return solveLetters()">
-            <label>Letters</label><br>
-            <input id="letters"><br>
-            <button id="submitLetters">Solve</button>
-            <div id="lettersResult"></div>
-        </form>
-
-        <h2>Numbers Game</h2>
-        <form onsubmit="return solveNumbers()">
-            <label>Numbers</label><br>
-            <input id="numbers"><br>
-            <label>Target</label><br>
-            <input id="target"><br>
-            <button>Solve</button>
-            <div id="numbersResult"></div>
-        </form>
-
+            <div class="game">
+                <h2>Numbers Game</h2>
+                <form onsubmit="return solveNumbers()">
+                    <label>Numbers</label><br>
+                    <input id="numbers"><br>
+                    <label>Target</label><br>
+                    <input id="target"><br>
+                    <button>Solve</button>
+                    <div class="result" id="numbersResult"></div>
+                </form>
+            </div>
+        </div>
     </body>
 </html>

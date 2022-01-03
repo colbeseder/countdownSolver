@@ -12,6 +12,10 @@ app = Flask(__name__,
 def index():
     return app.send_static_file("index.html")
 
+@app.route('/static/<file>')
+def static_files(file):
+    return app.send_static_file(file)
+
 @app.route('/api/numbers/<cards>/<target>')
 def numbers(cards, target):
     solution = numbersSolver.Solution(cards.split(","), target)

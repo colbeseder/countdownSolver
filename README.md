@@ -30,3 +30,5 @@ $ python3 lettersSolver.py ubcedmiug
 > MUG (3)
 > Completed in 0.00 seconds
 ```
+
+The repository also contains a simple web UI and a docker image for running it
