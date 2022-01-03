@@ -1,28 +1,46 @@
-<h2>Letters</h2>
-<input id="letters">
-<button id="submitLetters" onclick="solveLetters()">Go</button>
-<div id="lettersResult"></div>
-<h2>Numbers</h2>
-<input id="numbers">
-<input id="target">
-<button onclick="solveNumbers()">Go</button>
-<div id="numbersResult"></div>
-<script>
-function solveLetters(){
-    var cards = document.getElementById("letters").value;
-    fetch("/api/letters/" + cards)
-    .then(function(resp){
-        resp.text().then(function(text){document.getElementById("lettersResult").innerText = text});
-    });
-}
+<html>
+    <head>
+        <script>
+            function solveLetters(){
+                var cards = document.getElementById("letters").value.replace(/[^A-Z]/ig, "");
+                fetch("/api/letters/" + cards)
+                .then(function(resp){
+                    resp.text().then(function(text){document.getElementById("lettersResult").innerText = text + "   (" + text.length + ")"});
+                });
+                return false;
+            }
+            
+            function solveNumbers(){
+                var cards = document.getElementById("numbers").value.replace(/[^0-9]/g, ",");
+                var target = document.getElementById("target").value.replace(/[^0-9]/g, "")
+                fetch("/api/numbers/" + cards + "/" + target)
+                .then(function(resp){
+                    resp.text().then(function(text){document.getElementById("numbersResult").innerText = text});
+                });
+                return false;
+            }
+            </script>
+    </head>
+    <body>
+        <h1>Countdown Solver</h1>
 
-function solveNumbers(){
-    var cards = document.getElementById("numbers").value;
-    var target = document.getElementById("target").value
-    fetch("/api/numbers/" + cards + "/" + target)
-    .then(function(resp){
-        resp.text().then(function(text){document.getElementById("numbersResult").innerText = text});
-    });
-}
+        <h2>Letters Game</h2>
+        <form onsubmit="return solveLetters()">
+            <label>Letters</label><br>
+            <input id="letters"><br>
+            <button id="submitLetters">Solve</button>
+            <div id="lettersResult"></div>
+        </form>
 
-</script>
+        <h2>Numbers Game</h2>
+        <form onsubmit="return solveNumbers()">
+            <label>Numbers</label><br>
+            <input id="numbers"><br>
+            <label>Target</label><br>
+            <input id="target"><br>
+            <button>Solve</button>
+            <div id="numbersResult"></div>
+        </form>
+
+    </body>
+</html>
