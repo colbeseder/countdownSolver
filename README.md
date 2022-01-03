@@ -2,11 +2,11 @@
 
 ## Numbers Game Example
 
-- Target: 666
+- Target: 952
 - Selected Cards: 25 50 75 100 3 6
 
 ```
-$ python3 numbers.py 952 25 50 75 100 3 6
+$ python3 numbers.py 25 50 75 100 3 6 952
 > Found: ((((75 * 3) * (100 + 6)) - 50) / 25) = 952
 > Completed in 1.20 seconds
 ```

@@ -4,11 +4,11 @@ This program takes a target number, and a list of smaller numbers (cards), and a
 It does this by combing each pair of cards (once for each operator), and then all of those results, and then again, until all cards have been combined
 
 Example usages:
-	$ python3 numbers.py 819 75 50 2 3 8 7          
+	$ python3 numbers.py 75 50 2 3 8 7 819      
 	> Found: (((50 * 7) - (75 + 2)) * 3) = 819
 	> Completed in 0.03 seconds
 
-	$ python3 numbers.py 824 3 7 6 2 1 7 
+	$ python3 numbers.py 3 7 6 2 1 7 824
 	> Closest result was 2 away. ((((7 + 3) * 6) - 1) * (7 * 2)) = 826
 	> Completed in 8.50 seconds
 
@@ -105,9 +105,7 @@ class Solution():
 
 if __name__ == "__main__" :
 	start_time = time.time()
-	target = int(sys.argv[1])
-	cards = [int(c) for c in sys.argv[2:]]
+	target = int(sys.argv[-1])
+	cards = [int(c) for c in sys.argv[1:-1]]
 	Solution(cards, target)
 	print("Completed in %.2f seconds" % (time.time() - start_time))
-
-
