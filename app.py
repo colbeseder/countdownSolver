@@ -18,8 +18,7 @@ def static_files(file):
 
 @app.route('/api/numbers/<cards>/<target>')
 def numbers(cards, target):
-    solution = numbersSolver.Solution(cards.split(","), target)
-    return solution.get()
+    return numbersSolver.getReadableSolution(cards.split(","), target)
 
 @app.route('/api/letters/<cards>')
 def letters(cards):

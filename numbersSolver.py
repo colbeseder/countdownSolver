@@ -29,15 +29,38 @@ operations = [
 	Operation(lambda x,y: int(x/y) if x%y == 0 else 0, "/")
 ]
 
+# Exposes the raw parts of the solution, but can also provided them in readable form
+class Result():
+	def __init__(self, value, method, distance):
+		self.value = value
+		self.isFound = distance == 0
+		self.method = self.pretify(method)
+		self.distance = distance
+	
+	def pretify(self, x):
+		if x[1] == "":
+			return str(x[0])
+		#TODO: remove surplus brackets
+		return "(%s %s %s)"%(self.pretify(x[0]), x[1], self.pretify(x[2]))
+
+	def getReadable(self):
+		if self.isFound:
+			return "Found: %s = %s"%(self.method, self.value)
+		elif self.distance < math.inf:
+			return "%s away. %s = %s"%(self.distance, self.method, self.value)
+		else:
+			return "No solution found"
+		return 
+
 # A bunch is a group of cards, combined with operations to give a value
 class Bunch():
 	def __init__(self, value, used, prettyParts):
 		self.value = int(value)
+		self.used = used 
+		self.pretty = prettyParts
 		if value == 0: # not useful
 			self.hash = 0
 			return
-		self.used = used 
-		self.pretty = prettyParts
 		#TODO: Only supports up to 8 cards 8 should be replace by len(cards)
 		self.hash = (self.value << 8) + used # Duplicate bunches with the same value, using the same cards are irrelevant
 
@@ -51,27 +74,12 @@ class Solution():
 	def __init__(self, cards, target):
 		self.cards = cards	
 		self.target = int(target)
+		self.closest = Bunch(0, 0, ("","",""))
 		for i, card in enumerate(cards):
 			bunch = Bunch(card, 2**i, (str(card),"",""))
 			self.bunches[bunch.hash] = bunch
-		result = self.solve()
-		if result:
-			self.result = "Found: %s = %s"%(self.prettier(result.pretty), target)
-		elif self.closest:
-			self.result = "%s away. %s = %s"%(self.distance, self.prettier(self.closest.pretty), self.closest.value)
-		else:
-			self.result = "No solution found"
-		print(self.result)
-
-	def get(self):
-		return self.result
-
-	# Human readable method fo reaching found value
-	def prettier(self, x):
-		if x[1] == "":
-			return str(x[0])
-		#TODO: remove surplus brackets
-		return "(%s %s %s)"%(self.prettier(x[0]), x[1], self.prettier(x[2]))
+		self.solve()
+		self.result = Result(self.closest.value, self.closest.pretty, self.distance)
 
 	# Check that two bunched do not use the same card
 	def isCollision(self, b1, b2):
@@ -83,34 +91,40 @@ class Solution():
 	def combine(self, b1, b2): #returns newBunches, Matched bunch
 		newBunches = {}
 		if self.isCollision(b1, b2):
-			return newBunches, None
+			return newBunches
 
 		bigBunch, smallBunch = (b1, b2) if b1.value > b2.value else (b2, b1)
 		for op in operations:
-			bunch = Bunch(op.func(bigBunch.value, smallBunch.value), bigBunch.used | smallBunch.used, (bigBunch.pretty, op.sign, smallBunch.pretty))
-			if bunch.value == self.target: # Found the answer!
-				return {}, bunch
+			bunch = Bunch(op.func(bigBunch.value, smallBunch.value), 
+				bigBunch.used | smallBunch.used,
+				(bigBunch.pretty, op.sign, smallBunch.pretty))
 			dist = abs(self.target - bunch.value)
 			if dist < self.distance:
 				self.closest = bunch
 				self.distance = dist
 			newBunches[bunch.hash] = bunch
-		return newBunches, None
+			if dist == 0:
+				break
+		return newBunches
 
 	def solve(self):
 		for i in range(len(self.cards)-1):
 			newBunches = {}
 			for pair in itertools.combinations(self.bunches, 2):
-				combined, found = self.combine(self.bunches[pair[0]], self.bunches[pair[1]])
-				if found:
-					return found
+				combined = self.combine(self.bunches[pair[0]], self.bunches[pair[1]])
+				if self.distance == 0:
+					break
 				newBunches.update(combined)
 			self.bunches.update(newBunches)
 		return None
+
+def getReadableSolution(cards, target):
+	solution = Solution(cards, target)
+	return solution.result.getReadable()
 
 if __name__ == "__main__" :
 	start_time = time.time()
 	target = int(sys.argv[-1])
 	cards = [int(c) for c in sys.argv[1:-1]]
-	Solution(cards, target)
+	print(getReadableSolution(cards, target))
 	print("Completed in %.2f seconds" % (time.time() - start_time))
