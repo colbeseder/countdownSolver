@@ -2,7 +2,7 @@
 
 ## Numbers Game Example
 
-- Target: 952g
+- Target: 952
 - Selected Cards: 25 50 75 100 3 6
 
 ```
