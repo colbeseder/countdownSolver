@@ -23,9 +23,9 @@ $ python3 lettersSolver.py ubcedmiug
 ## Use a different word list
 
 ```
-$ python3 resources/dictionaryHelper.py <myWords.txt>
+$ printf "CUP\nGLASS\nMUG" > myWords.txt
+$ python3 resources/dictionaryHelper.py myWords.txt
 > Initializing new dictionary
-
 $ python3 lettersSolver.py ubcedmiug
 > MUG (3)
 > Completed in 0.00 seconds
