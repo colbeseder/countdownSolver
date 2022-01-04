@@ -1,0 +1,26 @@
+body {
+    background-color: #3061bf;
+    color: #d8dfe9;
+    font-family: monospace;
+}
+
+.game {
+    border: solid;
+    width: fit-content;
+    padding: 1.5em;
+    padding-right: 10em;
+    margin: 2em;
+    float: left;
+    height: 16em;
+    font-size: large;
+}
+
+input {
+    margin-top: 0.2em;
+    margin-bottom: 1em;
+    width: 100%
+}
+
+.result {
+    padding: 1em;
+}
