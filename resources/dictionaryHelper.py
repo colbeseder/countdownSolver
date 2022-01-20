@@ -48,13 +48,13 @@ class DictTree():
 	def findAll(self, pool, root=None):
 		if root is None:
 			root = self.root
-		words = []
+		words = set()
 		for c in pool:
 			if c in root.children:
 				if root.children[c].isWordEnd:
-					words.append(root.children[c].word)
+					words.add(root.children[c].word)
 				if len(pool) > 1:
-					words.extend(self.findAll(pool.replace(c, "", 1), root.children[c]))
+					words = words.union(self.findAll(pool.replace(c, "", 1), root.children[c]))
 		return words
 
 def prepFromFile(filePath):
@@ -82,7 +82,7 @@ def findAllFromDefaultDictionary(pool):
 	except Exception as e:
 		tree = prepFromDefault()
 		stash(DEFAULT_PICKLE_PATH, tree) # for next time
-	return tree.findAll(pool.upper())
+	return list(tree.findAll(pool.upper()))
 
 if __name__ == "__main__":
 	wordListPath = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_WORD_LIST

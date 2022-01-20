@@ -3,11 +3,17 @@
         <title>Countdown Solver</title>
         <link rel="stylesheet" href="styles.css">
         <script>
+
+            function prettifyWords(wordList) {
+                var words = JSON.parse(wordList);
+                return `${words[0].length} Letters<ul><li>${words.join("<li>")}</ul>`;
+            }
+
             function solveLetters(){
                 var cards = document.getElementById("letters").value.replace(/[^A-Z]/ig, "");
                 fetch("/api/letters/" + cards)
                 .then(function(resp){
-                    resp.text().then(function(text){document.getElementById("lettersResult").innerText = text + "   (" + text.length + ")"});
+                    resp.text().then(function(text){document.getElementById("lettersResult").innerHTML = prettifyWords(text)});
                 });
                 return false;
             }

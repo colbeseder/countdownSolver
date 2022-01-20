@@ -1,5 +1,5 @@
 from flask import Flask
-import requests
+import requests, json
 import numbersSolver, lettersSolver, resources.dictionaryHelper
 
 app = Flask(__name__)
@@ -22,7 +22,7 @@ def numbers(cards, target):
 
 @app.route('/api/letters/<cards>')
 def letters(cards):
-    return lettersSolver.solve(cards)
+    return json.dumps(lettersSolver.solve(cards))
 
 @app.route('/<path:path>')
 def static_file(path):

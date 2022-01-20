@@ -6,7 +6,9 @@ def solve(cards):
     if len(words) == 0:
         return ""
     else:
-        return max(words, key=len)
+        longest = len(max(words, key=len))
+        return list(filter(lambda x: len(x) == longest, words))
+        
 
 if __name__ == "__main__":
     start_time = time.time()
