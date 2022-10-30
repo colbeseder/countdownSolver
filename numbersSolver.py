@@ -65,16 +65,12 @@ class Bunch():
 		self.hash = (self.value << 8) + used # Duplicate bunches with the same value, using the same cards are irrelevant
 
 class Solution():
-	bunches = {}
-	cards = []
-	target = None
-	closest = None
-	distance = math.inf
-
 	def __init__(self, cards, target):
-		self.cards = cards	
+		self.cards = cards
+		self.bunches = {}
 		self.target = int(target)
 		self.closest = Bunch(0, 0, ("","",""))
+		self.distance = math.inf
 		for i, card in enumerate(cards):
 			bunch = Bunch(card, 2**i, (str(card),"",""))
 			self.bunches[bunch.hash] = bunch
